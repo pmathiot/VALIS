@@ -20,7 +20,7 @@ parser.add_argument("-o"   , metavar='output_file'   , help="output figure name 
 parser.add_argument("-t"   , metavar='figure_title'  , help="figure title"                , type=str  , nargs=1, required=True)
 args = parser.parse_args()
 
-test=scipy.io.loadmat('/data/users/pmathiot/BCKUP/BAS_BCKUP/MATLAB/PLOT_PERIANT025/meltratepal.mat')
+test=scipy.io.loadmat('meltratepal.mat')
 rgb=test["meltratepal"]
 cmap=mcolors.ListedColormap(rgb)
 cmap.set_bad('0.75', 1.0)
