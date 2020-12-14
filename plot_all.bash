@@ -11,15 +11,15 @@ wait
 echo 'Plot map'
 RUNID=bt705
 FILET="nemo_${RUNID}o_1y_${TAG}_grid-T.nc"
-#python2.7 plot_meltrate_sector.py -ftem ${DIR}/${RUNID}/${FILET} -fisf ${DIR}/${RUNID}/${FILET} -vtem thetaob -visf sowflisf -t "GO8 JRA (${YEAR})" -o melt_sector_${RUNID}_${YEAR}.png
+python2.7 plot_meltrate_sector.py -ftem ${DIR}/${RUNID}/${FILET} -fisf ${DIR}/${RUNID}/${FILET} -vtem thetaob -visf sowflisf -t "GO8 JRA (${YEAR})" -o melt_sector_${RUNID}_${YEAR}.png
 
 RUNID=bt036
 FILET="nemo_${RUNID}o_1y_${TAG}_grid-T.nc"
-#python2.7 plot_meltrate_sector.py -ftem ${DIR}/${RUNID}/${FILET} -fisf ${DIR}/${RUNID}/${FILET} -vtem thetaob -visf sowflisf -t "GO8 DFS5.2 (${YEAR})" -o melt_sector_${RUNID}_${YEAR}.png
+python2.7 plot_meltrate_sector.py -ftem ${DIR}/${RUNID}/${FILET} -fisf ${DIR}/${RUNID}/${FILET} -vtem thetaob -visf sowflisf -t "GO8 DFS5.2 (${YEAR})" -o melt_sector_${RUNID}_${YEAR}.png
 
 RUNID=bt223
 FILET="nemo_${RUNID}o_1y_${TAG}_grid-T.nc"
-#python2.7 plot_meltrate_sector.py -ftem ${DIR}/${RUNID}/${FILET} -fisf ${DIR}/${RUNID}/${FILET} -vtem thetaob -visf sowflisf -t "GO8 CORE (${YEAR})" -o melt_sector_${RUNID}_${YEAR}.png
+python2.7 plot_meltrate_sector.py -ftem ${DIR}/${RUNID}/${FILET} -fisf ${DIR}/${RUNID}/${FILET} -vtem thetaob -visf sowflisf -t "GO8 CORE (${YEAR})" -o melt_sector_${RUNID}_${YEAR}.png
 
 echo 'Plot isf sanity plot'
 RUNID='bt036 bt223 bt705 bs852'
