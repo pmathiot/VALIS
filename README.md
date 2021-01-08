@@ -1,15 +1,15 @@
 # VALIS
 
 ## Purpose
-%%%
+<!--
  * Assess the order 0 of the water masses properties and ice shelf melt in NEMO output
    * plot_meltrate_sector.py plots bottom temperature and ice shelf melt map per sector for a specific run
 ![Alt text](melt_sector.png?raw=true "Example of plot_meltrate_sector.py output")
 
    * plot_mlt_timeseries.py plots ice shelf melt time series against observation/model estimates
 ![Alt text](melt_ts_cold.png?raw=true "Example of plot_mlt_timeseries.py output")
-%%%
-   * plot_mlt_distri.py assess for a specific ice shelf :
+-->
+   * *plot_mlt_distri.py* assess for a specific ice shelf :
       * water mass properties at the calving front against WOA data
       * ice shelf melt distribution vs isf draft area distribution
       * ice shelf melt time serie
@@ -19,6 +19,7 @@
 ![Alt text](FRIS.png?raw=true "Example of plot_mlt_distri.py output")
 
 ## Usage
+<!--
  * plot_mlt_timeseries.py example: ```python2.7 plot_mlt_timeseries.py -dir [DATA DIR] -runid [RUNID/NAME] -f [FILENAMES (wildcard accepted)] -var [ISF list] -title [TITLE] -o [OUTPUT name] -obs [OBS file] -minmax [DATA range] -sf [SCALE factor] -noshow```
     * DATA DIR: where the data are (expect an dir tree like this DATADIR/RUNID/*.nc)
     * RUNID: simulation key work used to retreive the run style in run.sty and the data directory (1 arg per run)
@@ -36,12 +37,12 @@
     * FILEISF: netcdf file containing [FILEISF] (ice shelf melt rate) variable
     * TITLE: plot title
     * OUTPUT: output figure name
-    
- * plot_mlt_distri.py example: 
+-->
+ * *plot_mlt_distri.py*: 
 ```
    python plot_mlt_distri.py -dir [DATA DIR] -runid [RUNID] -fmltts [FILEMLT] -vmlt [VARISF] -ftemts [FILET] -vtem [VART] -fsalts [FILES] -vsal [VARS] -isf [ISF] -title "$TITLE" -o ${ISF}_${YEAR} -noshow
 ```
-    * `DATADIR`: where the data are (expect a dir tree like this DATADIR/RUNID/*.nc)
+    * `DATADIR`: where the data are (expect a dir tree like this DATADIR/RUNID/\*.nc)
     * `RUNID`  : simulation key work used to retreive the run style in run.sty and the data directory (1 arg per run)
     * `FILEMLT`: netcdf file containing integrated melt per isf.
     * `FILET`  : netcdf file containing mean T profile in front of each ice shelf
