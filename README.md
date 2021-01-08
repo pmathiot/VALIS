@@ -38,19 +38,19 @@
     * TITLE: plot title
     * OUTPUT: output figure name
 -->
- * **plot_mlt_distri.py**: 
+ ### plot_mlt_distri.py
 ```
    python plot_mlt_distri.py -dir [DATA DIR] -runid [RUNID] -fmltts [FILEMLT] -vmlt [VARISF] -ftemts [FILET] -vtem [VART] -fsalts [FILES] -vsal [VARS] -isf [ISF] -title "$TITLE" -o ${ISF}_${YEAR} -noshow
 ```
-    * `DATADIR`: where the data are (expect a dir tree like this DATADIR/RUNID/\*.nc)
-    * `RUNID`  : simulation key work used to retreive the run style in run.sty and the data directory (1 arg per run)
-    * `FILEMLT`: netcdf file containing integrated melt per isf.
-    * `FILET`  : netcdf file containing mean T profile in front of each ice shelf
-    * `FILES`  : netcdf file containing mean S profile in front of each ice shelf
-    * `ISF`    : ice shelf name (see isf.sty for accepted name)
-    * `TITLE`  : plot title
-    * `OUTPUT` : output file name without the extension (a png and txt file will be saved). The txt file contain the exact python command run and the png the figure.
-    * `noshow` : only save the output (no display)
+ * `DATADIR`: where the data are (expect a dir tree like this DATADIR/RUNID/\*.nc)
+ * `RUNID`  : simulation key work used to retreive the run style in run.sty and the data directory (1 arg per run)
+ * `FILEMLT`: netcdf file containing integrated melt per isf.
+ * `FILET`  : netcdf file containing mean T profile in front of each ice shelf
+ * `FILES`  : netcdf file containing mean S profile in front of each ice shelf
+ * `ISF`    : ice shelf name (see isf.sty for accepted name)
+ * `TITLE`  : plot title
+ * `OUTPUT` : output file name without the extension (a png and txt file will be saved). The txt file contain the exact python command run and the png the figure.
+ * `noshow` : only save the output (no display)
     
 ## Requirements:
  * python with the following module:
