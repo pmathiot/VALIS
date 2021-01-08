@@ -35,6 +35,7 @@ def lighten_color(color, amount=0.5):
     return colorsys.hls_to_rgb(c[0], 1 - amount * (1 - c[1]), c[2])
 
 # def class runid
+#===========================================================================
 class obs(object):
     def __init__(self,isfc,mshc):
         self.name='WOA2018'
@@ -138,6 +139,7 @@ def get_shortest_in(xlon, ylat, lon1d, lat1d):
     d = 6371.0 * 2.0 * np.arcsin(np.sqrt(a[a==np.amin(a)]))
     return d
 
+#===========================================================================
 class run(object):
     def __init__(self, runid, cdir, cfiletts, cfilests, cfileqts, cvtem, cvsal, cvmlt, isfc, mshc):
         # parse dbfile
@@ -241,11 +243,11 @@ class run(object):
 
 #================================================================================
 class isf(object):
-    def __init__(self, cisf):
+    def __init__(self, cisf, cdir='./'):
         self.name = cisf
         self.clr, self.iid, self.mapdef, self.Trange, self.Srange, self.qrange = self.load_isf(cisf)
-        self.msk     = self.load_msk(cisf,'mask_isf.nc','mask_isf')
-        self.msk_cnt = self.load_msk(cisf,'mask_isf.nc','mask_isf_front')
+        self.msk     = self.load_msk(cisf,cdir+'mskisf.nc','mask_isf')
+        self.msk_cnt = self.load_msk(cisf,cdir+'mskisf.nc','mask_isf_front')
 
     def load_msk(self, cisf, cfile, cvar):
         lmsk=get_2d_data(cfile,cvar)
@@ -281,17 +283,17 @@ class isf(object):
 
 #================================================================================
 class msh(object):
-    def __init__(self):
-        ncid   = nc.Dataset('mask.nc')
+    def __init__(self,cdir='./'):
+        ncid   = nc.Dataset(cdir+'mask.nc')
         self.z    = ncid.variables['gdept_1d'][:].squeeze()
         ncid.close()
 
-        self.lon  = get_2d_data('mesh.nc','glamt')
-        self.lat  = get_2d_data('mesh.nc','gphit')
+        self.lon  = get_2d_data(cdir+'mesh.nc','glamt')
+        self.lat  = get_2d_data(cdir+'mesh.nc','gphit')
         
-        self.msk  = get_2d_data('mask.nc','tmaskutil')
-        self.zisf = get_2d_data('mask.nc','isfdraft')
-        self.area = get_2d_data('mesh.nc','e1t') * get_2d_data('mesh.nc','e2t')
+        self.msk  = get_2d_data(cdir+'mask.nc','tmaskutil')
+        self.zisf = get_2d_data(cdir+'mask.nc','isfdraft' )
+        self.area = get_2d_data(cdir+'mesh.nc','e1t'      ) * get_2d_data(cdir+'mesh.nc','e2t')
 
 #================================================================================
 class plot(object):
@@ -770,7 +772,7 @@ def fix_arglist(nrun,argin,ctxt):
        print( 'number of arguments is not compatible with the number of runid ('+ctxt+')' )
        sys.exit(42)
     return argout
-
+#==============================================================================
 
 def main():
 
@@ -796,21 +798,22 @@ def main():
     fsalts=fix_arglist(nrun,args.fsalts,'args.fsalts')
     cdir  =fix_arglist(nrun,args.dir   ,'args.dir')
 
-# load isf data
-    print('load isf data')
-    isfc = isf(args.isf[0])
-
-# load msh data
-    print('load msh')
-    mshc = msh()
-
-# load WOA profile
-    print('load profile')
-    profc = obs(isfc,mshc)
-
 # load data for each run
     print('load each run')
     for irun, runid in enumerate(args.runid):
+
+        # load isf data
+        print('load isf data')
+        isfc = isf(args.isf[0],cdir[irun]+'/'+runid+'/')
+
+        # load msh data
+        print('load msh')
+        mshc = msh(cdir[irun]+'/'+runid+'/')
+
+        # load WOA profile
+        print('load profile')
+        profc = obs(isfc,mshc)
+
         #run_lst[irun] = run(runid, cdir[irun], ftem[irun], fsal[irun], fmlt[irun], ftemts[irun], fsalts[irun], fmltts[irun], vtem[irun], vsal[irun], vmlt[irun], isfc, mshc)
         run_lst[irun] = run(runid, cdir[irun], ftemts[irun], fsalts[irun], fmltts[irun], vtem[irun], vsal[irun], vmlt[irun], isfc, mshc)
 

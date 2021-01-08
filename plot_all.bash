@@ -25,7 +25,7 @@ FILET_TS="ISF_Tprof*1y_y*_gridT.nc"
 FILES_TS="ISF_Sprof*1y_y*_gridT.nc"
 FILEQ_TS="*y????.1y*flxT.nc"
 
-for ISF in FIMB RIIS PINE FRIS ROSS AMER GETZ GEVI ; do
+for ISF in FIMB ; do # RIIS PINE FRIS ROSS AMER GETZ GEVI ; do
    TITLE="$ISF ($YEAR)"
    echo "$ISF ..."
    python ./plot_mlt_distri.py -runid ${RUNID} -fmltts ${FILEQ_TS} -vmlt sowflisf_cav -ftemts ${FILET_TS} -vtem mean_votemper_${ISF} -fsalts ${FILES_TS} -vsal mean_vosaline_${ISF} -isf ${ISF} -dir $SCRATCHDIR/VALSO/ -title "${ISF}" -o ${ISF}
