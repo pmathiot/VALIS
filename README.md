@@ -55,18 +55,18 @@
 ## Requirements:
  * python with the following module:
 ```
-	name: py37
-	channels:
-	  - defaults
-	dependencies:
-	  - python=3.7.4
-	  - cartopy
-	  - gsw
-	  - scipy
-	  - netcdf4
-	  - dask
-	  - xarray
-	prefix: /home/pmathiot/.conda/envs/py37
+name: py37
+channels:
+  - defaults
+dependencies:
+  - python=3.7.4
+  - cartopy
+  - gsw
+  - scipy
+  - netcdf4
+  - dask
+  - xarray
+prefix: /home/pmathiot/.conda/envs/py37
 ```
  * plot_mlt_distri.py and plot_meltrate_sector.py requires to have all the run to use the same mesh and mask files.
  * mask_isf.nc: use cdfisf_fill to generate this file
