@@ -16,7 +16,7 @@
       * T and S hovmuller plot at calving front
       * comparison between run profile and WOA2018 profile
       * localisation map
-![Alt text](FRIS_1996-2005.png?raw=true "Example of plot_mlt_distri.py output")
+![Alt text](FRIS.png?raw=true "Example of plot_mlt_distri.py output")
 
 ## Usage
  * plot_mlt_timeseries.py example: ```python2.7 plot_mlt_timeseries.py -dir [DATA DIR] -runid [RUNID/NAME] -f [FILENAMES (wildcard accepted)] -var [ISF list] -title [TITLE] -o [OUTPUT name] -obs [OBS file] -minmax [DATA range] -sf [SCALE factor] -noshow```
