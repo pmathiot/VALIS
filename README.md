@@ -76,3 +76,6 @@ prefix: /home/pmathiot/.conda/envs/py37
  * run.sty file: you need to add you runid in the list of available run style.
  * isf.sty file: you need to add the isf you want to look at in the list of available isf style.
  * obs.sty file: you need to add the obs file you want to plot in the list of available obs style.
+
+## Recommandations:
+ * Run VALSO toolbox before (at least the ISF diagnostics) to have all the input file needed for the plot processed with the right format and everything ...
