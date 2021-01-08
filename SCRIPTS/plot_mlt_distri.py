@@ -54,7 +54,7 @@ class obs(object):
         self.obsm=self.load_mltobs(isfc)
 
     def load_mltobs(self,isfc):
-        with open('Rignot_2013.txt', 'r') as obsfile:
+        with open('MLT/Rignot_2013.txt', 'r') as obsfile:
             for line in obsfile:
                 isfname    = line.split()[0]
                 if isfname == isfc.name:
@@ -66,7 +66,7 @@ class obs(object):
     def load_prof(self,cvar):
         #
         # load data
-        ncid      = nc.Dataset(self.cfile)
+        ncid      = nc.Dataset('OBS/'+self.cfile)
 
         cast_vndta= ncid.variables[cvar+'_row_size'][:]
         flg       = ncid.variables[cvar+'_WODflag'][:]
@@ -96,7 +96,7 @@ class obs(object):
     def load_cast(self,cvar,isfc,mshc):
         #
         # load data set
-        ncid      = nc.Dataset(self.cfile)
+        ncid      = nc.Dataset('OBS/'+self.cfile)
         lon       = ncid.variables['lon'][:]
         lat       = ncid.variables['lat'][:]
         flgp      = ncid.variables[cvar+'_WODprofileflag'][:]
@@ -219,7 +219,7 @@ class run(object):
     def load_att(self,runid):
         try:
             lstyle=False
-            with open('run.sty') as fid:
+            with open('STYLES/run.sty') as fid:
                 for cline in fid:
                     att=cline.split('|')
                     if att[0].strip() == runid:
@@ -227,7 +227,7 @@ class run(object):
                         cpltclr   = att[3].strip()
                         lstyle=True
             if not lstyle:
-                print( runid+' not found in run.sty' )
+                print( runid+' not found in STYLES/run.sty' )
                 raise Exception
            
         except Exception as e:
@@ -258,7 +258,7 @@ class isf(object):
     def load_isf(self, cisf):
         try:
             lstyle=False
-            with open('isf.sty') as fid:
+            with open('STYLES/isf.sty') as fid:
                 for cline in fid:
                     att=cline.split('|')
                     isfname      = att[0].strip()
@@ -272,7 +272,7 @@ class isf(object):
 
                     lstyle=True
             if not lstyle:
-                print( runid+' not found in isf.sty' )
+                print( runid+' not found in STYLES/isf.sty' )
                 raise Exception
     
             return clr,iid,mapdef,Trange,Srange,qrange
