@@ -27,9 +27,9 @@ FILEQ_TS="*y????.1y*flxT.nc"
 . param.bash
 
 if [ $RUN_MLT_DST == 1 ] ; then 
-   for ISF in FIMB ; do # RIIS PINE FRIS ROSS AMER GETZ GEVI ; do
+   for ISF in FIMB RIIS PINE FRIS ROSS AMER GETZ GEVI ; do
        echo "$ISF ..."
-       python SCRIPTS/plot_mlt_distri.py -runid ${RUNID} -fmltts ${FILEQ_TS} -vmlt sowflisf_cav -ftemts ${FILET_TS} -vtem mean_votemper_${ISF} -fsalts ${FILES_TS} -vsal mean_vosaline_${ISF} -isf ${ISF} -dir ${WRKPATH} -title "${ISF}" -o ${ISF}
+       python SCRIPTS/plot_mlt_distri.py -runid ${RUNID} -fmltts ${FILEQ_TS} -vmlt sowflisf_cav -ftemts ${FILET_TS} -vtem mean_votemper_${ISF} -fsalts ${FILES_TS} -vsal mean_vosaline_${ISF} -isf ${ISF} -dir ${WRKPATH} -title "${ISF}" -o ${ISF} -noshow
    done
 else
    echo '$RUN_MLT_DST is different to 1; nothing is done'

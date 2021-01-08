@@ -150,8 +150,8 @@ class run(object):
         self.name, self.clr  = self.load_att(runid)
 
         self.load_dnc(cdir, cfiletts, cvtem, '1', 'tempts')
-        self.load_dnc(cdir, cfilests, cvsal, '1', 'salts')
-        self.load_dnc(cdir, cfileqts, cvmlt, '1', 'mltts')
+        self.load_dnc(cdir, cfilests, cvsal, '1', 'salts' )
+        self.load_dnc(cdir, cfileqts, cvmlt, '1', 'mltts' )
         self.draft, self.area, self.melt, self.meltts, self.melttot, self.T, self.Tts, self.S, self.Sts = self.load_data(isfc,mshc)
 
     def load_dnc(self, cdir, cfile, cvar, cnf, ckey):
@@ -208,7 +208,7 @@ class run(object):
     def get_profilets(self,cvar,mshc):
         nt = len(self.dnc['cf'+cvar+'ts'])
         nk = get_dim(self.dnc['cf'+cvar+'ts'][0],'z')
-        timets=np.zeros(shape=nt)
+        timets=[None]*nt #np.zeros(shape=nt)
         prots=np.ma.zeros(shape=(nk,len(self.dnc['cf'+cvar+'ts'])+1))
         prots[:,0]=mshc.z[:]
         for kf,cfile in enumerate(self.dnc['cf'+cvar+'ts']) :
@@ -331,16 +331,17 @@ class plot(object):
         self.plot_obsTS(obsc)
         self.plot_TS(runlst)
        
-        self.plot_obst(obsc)
-        self.plot_proft(runlst)
+        self.plot_obs('profT',obsc.name,obsc.obsT,obsc.Tz)
+        self.plot_obs('profS',obsc.name,obsc.obsS,obsc.Sz)
 
-        self.plot_obss(obsc)
-        self.plot_profs(runlst)
+        for irun, runid in enumerate(runlst):
+            self.plot_prof('profT',runid,runid.Tts,runid.T)
+            self.plot_prof('profS',runid,runid.Sts,runid.S)
 
         if len(runlst) == 1:
             # temperture hovmuller
-            self.plot_hovT(isfc,runlst)
-            self.plot_hovS(isfc,runlst)
+            self.plot_hov('hovT',runlst[0].Tts,isfc.Trange[0],isfc.Trange[1],'[C]')
+            self.plot_hov('hovS',runlst[0].Sts,isfc.Srange[0],isfc.Srange[1],'[g/kg]')
 
         # map isf
         self.plot_mapisf(isfc,obsc,mshc)
@@ -376,29 +377,29 @@ class plot(object):
         self.ax['mapisf'].pcolormesh(mshc.lon[0:-4,:],mshc.lat[0:-4,:],isfc.msk[0:-4,:],vmin=0.5,vmax=2,cmap=cmap,transform=ccrs.PlateCarree(),rasterized=True, label=isfc.name, shading='flat')
         self.ax['mapisf'].plot(obsc.lon,obsc.lat,'o', markersize=6, color='royalblue', markeredgecolor='royalblue', transform=ccrs.PlateCarree(), label='WOA2018 obs')
 
-    def plot_hovT(self,isf,runlst):
-        runid=runlst[0]
-        datemin = mdates.date2num(np.datetime64(mdates.num2date(runid.Sts[0][0])))
-        datemax = mdates.date2num(np.datetime64(mdates.num2date(runid.Sts[0][-1]+365)))
-        pcol=self.ax['hovT'].pcolormesh(runid.Tts[0][:],runid.Tts[1][:,0],runid.Tts[1][:,1::],vmin=isf.Trange[0], vmax=isf.Trange[1], shading='nearest')
-        self.ax['hovT'].set_xlim(datemin, datemax)
-        self.ax['hovT'].set_xticks(np.arange(datemin, datemax, 5*366))
-        self.ax['hovT'].xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
-        cbar = plt.colorbar(pcol, ax=self.ax['hovT'], extend='both')
+    def plot_hov(self,cax,dat,rmin,rmax,cunit):
+        # plot
+        pcol=self.ax[cax].pcolormesh(dat[0][:],dat[1][:,0],dat[1][:,1::],vmin=rmin, vmax=rmax, shading='nearest')
+        #
+        # xaxis
+        datemin = mdates.num2date(dat[0][0])
+        datemax = mdates.num2date(dat[0][-1])
+        nyear=(datemax-datemin).days/365 + 1
+        if nyear < 10:
+            nyt=1
+        elif 10<=nyear<50:
+            nyt=5
+        elif 50<=nyear<100:
+            nyt=10
+        else:
+            nyt=100
+        self.ax[cax].xaxis.set_major_locator(mdates.YearLocator(nyt,month=1,day=1))
+        self.ax[cax].xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
+        #
+        # cbar
+        cbar = plt.colorbar(pcol, ax=self.ax[cax], extend='both')
         cbar.ax.tick_params(labelsize=16)
-        cbar.ax.set_title('[C]',fontsize=16)
-
-    def plot_hovS(self,isf,runlst):
-        runid=runlst[0]
-        datemin = mdates.date2num(np.datetime64(mdates.num2date(runid.Sts[0][0]), 'Y'))
-        datemax = mdates.date2num(np.datetime64(mdates.num2date(runid.Sts[0][-1]+365), 'Y'))
-        pcol=self.ax['hovS'].pcolormesh(runid.Sts[0][:],runid.Sts[1][:,0],runid.Sts[1][:,1::],vmin=isf.Srange[0], vmax=isf.Srange[1], shading='nearest')
-        self.ax['hovS'].set_xlim(datemin, datemax)
-        self.ax['hovS'].set_xticks(np.arange(datemin, datemax, 5*366))
-        self.ax['hovS'].xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
-        cbar = plt.colorbar(pcol, ax=self.ax['hovS'], extend='both')
-        cbar.ax.tick_params(labelsize=16)
-        cbar.ax.set_title('[g/kg]',fontsize=16)
+        cbar.ax.set_title(cunit,fontsize=16)
 
     def plot_obsTS(self,obsc):
         TScastid = set(obsc.Scast).intersection(obsc.Tcast)
@@ -426,33 +427,18 @@ class plot(object):
         CS = self.ax['TS'].contour(si, ti, dens, cnt_lvl, linestyles='dashed', colors='0.7',zorder=99, linewidths=1)
         self.ax['TS'].clabel(CS, inline=True, fontsize=12, fmt='%4.2f', inline_spacing=1) # Label every second level
 
-    def plot_proft(self,runlst):
-        for irun, runid in enumerate(runlst):
-            datmin=np.amin(runid.Tts[1][:,1:],axis=1)
-            datmax=np.amax(runid.Tts[1][:,1:],axis=1)
-            self.ax['profT'].fill_betweenx(runid.Tts[1][:,0],datmin[:],datmax[:],color=lighten_color(runid.clr,0.5),alpha=0.5)
-            self.ax['profT'].plot(runid.T[:,1],runid.T[:,0],color=runid.clr,linewidth=5,label=runid.name)
+    def plot_prof(self,cax,runid,datts,dat):
+        datmin=np.amin(datts[1][:,1:],axis=1)
+        datmax=np.amax(datts[1][:,1:],axis=1)
+        self.ax[cax].fill_betweenx(datts[1][:,0],datmin[:],datmax[:],color=lighten_color(runid.clr,0.5),alpha=0.5)
+        self.ax[cax].plot(dat[:,1],dat[:,0],color=runid.clr,linewidth=5,label=runid.name)
 
-    def plot_profs(self,runlst):
-        for irun, runid in enumerate(runlst):
-            datmin=np.amin(runid.Sts[1][:,1:],axis=1)
-            datmax=np.amax(runid.Sts[1][:,1:],axis=1)
-            self.ax['profS'].fill_betweenx(runid.Sts[1][:,0],datmin[:],datmax[:],color=lighten_color(runid.clr,0.5),alpha=0.5)
-            self.ax['profS'].plot(runid.S[:,1],runid.S[:,0],color=runid.clr,linewidth=5,label=runid.name)
-
-    def plot_obst(self,obsc):
-        datmin=np.nanmin(obsc.obsT[:,:],axis=1)
-        datmax=np.nanmax(obsc.obsT[:,:],axis=1)
-        zdat  =np.nanmean(obsc.Tz[:,:],axis=1)
-        self.ax['profT'].fill_betweenx(zdat,datmin,datmax,color='gainsboro',alpha=0.5)
-        self.ax['profT'].plot(np.nanmean(obsc.obsT,axis=1),np.nanmean(obsc.Tz,axis=1),color='silver',linewidth=5,label=obsc.name)
-
-    def plot_obss(self,obsc):
-        datmin=np.nanmin(obsc.obsS[:,:],axis=1)
-        datmax=np.nanmax(obsc.obsS[:,:],axis=1)
-        zdat  =np.nanmean(obsc.Sz[:,:],axis=1)
-        self.ax['profS'].fill_betweenx(zdat,datmin,datmax,color='gainsboro',alpha=0.5)
-        self.ax['profS'].plot(np.nanmean(obsc.obsS,axis=1),np.nanmean(obsc.Sz,axis=1),color='silver',linewidth=5,label=obsc.name)
+    def plot_obs(self,cax,clabel,obsdat,obsz):
+        datmin=np.nanmin(obsdat[:,:],axis=1)
+        datmax=np.nanmax(obsdat[:,:],axis=1)
+        zdat  =np.nanmean(obsz[:,:],axis=1)
+        self.ax[cax].fill_betweenx(zdat,datmin,datmax,color='gainsboro',alpha=0.5)
+        self.ax[cax].plot(np.nanmean(obsdat,axis=1),np.nanmean(obsz,axis=1),color='silver',linewidth=5,label=clabel)
 
     def plot_aread(self,runlst):
         # plot area distri only for one simulation
@@ -471,7 +457,10 @@ class plot(object):
             self.ax['meltt'].plot(runid.melttot, marker='o', markeredgecolor=runid.clr, color=runid.clr, markersize=8)
 
     def plot_meltts(self,runlst,obsc):
-        timemax=np.max([runlst[irun].meltts[0][-2] for irun in range(0,len(runlst))])
+        timemax=np.max([runlst[irun].meltts[0][-1] for irun in range(0,len(runlst))])
+        timemin=np.min([runlst[irun].meltts[0][0] for irun in range(0,len(runlst))])
+        timemax=timemax + (timemax-timemin)/20.
+
         for irun, runid in enumerate(runlst):
             self.ax['meltts'].plot(runid.meltts[0][:], runid.meltts[1][:], '-o', markeredgecolor=runid.clr, color=runid.clr, markersize=8)
         self.ax['meltts'].errorbar(timemax, obsc.obsm[0], yerr=obsc.obsm[1], fmt='o', markersize=8, color='k', linewidth=3, label='Rignot et al. 2013')
@@ -520,7 +509,7 @@ class plot(object):
 
     # save plot
     def save(self):
-        self.fig.savefig(self.fout+'.png', format='png', dpi=150)
+        self.fig.savefig('FIGURES/'+self.fout+'.png', format='png', dpi=150)
 
     def add_legend(self, ncol=5, lvis=True):
         # isf area
@@ -639,9 +628,9 @@ def get_time_data(cfile,cvar):
     timeidx=[None]*ntime
     for itime in range(0, ntime):
         if isinstance(time,(list,np.ndarray)):
-            timeidx[itime] = np.datetime64(time[itime],'us')
+            timeidx[itime] = np.datetime64(time[itime])#,'us')
         else:
-            timeidx[itime] = np.datetime64(time,'us')
+            timeidx[itime] = np.datetime64(time)       #,'us')
 
     return timeidx[:]
 
@@ -780,7 +769,7 @@ def main():
     args = load_argument()
 
 # output argument list
-    output_argument_lst(args.o[0]+'.txt', sys.argv)
+    output_argument_lst('FIGURES/'+args.o[0]+'.txt', sys.argv)
 
 # initialisation
     print('initialisation')
