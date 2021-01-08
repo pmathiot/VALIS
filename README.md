@@ -19,6 +19,25 @@
 ![Alt text](FRIS.png?raw=true "Example of plot_mlt_distri.py output")
 
 ## Usage
+
+* Add your WOA2018 profile in OBS:
+   - file name 'ISF name'_CTD_WOA2018.nc. 
+   - You can generate this file by going here: https://www.nodc.noaa.gov/OC5/SELECT/dbsearch/dbsearch.html
+
+* set up your style in STYLE:
+   - define your color, line style, name (...) for every simulation in run.sty
+   - define your color, line style, id   (...) for every ice shelves in isf.sty 
+
+* if required, add your melt rate comparison data in MLT
+
+* setup the param file:
+   - WRKPATH need to be the same as the one used in VALSO (ie the master directory where all the simulation sub directories are)
+   - define the kind of plot you want
+
+* run ./plot_all.bash [RUNID]
+   - RUNID have a syntax like this for example (eORCA025.L121-OPM006)
+   - all available data are processed by default
+
 <!--
  * plot_mlt_timeseries.py example: ```python2.7 plot_mlt_timeseries.py -dir [DATA DIR] -runid [RUNID/NAME] -f [FILENAMES (wildcard accepted)] -var [ISF list] -title [TITLE] -o [OUTPUT name] -obs [OBS file] -minmax [DATA range] -sf [SCALE factor] -noshow```
     * DATA DIR: where the data are (expect an dir tree like this DATADIR/RUNID/*.nc)
@@ -38,7 +57,7 @@
     * TITLE: plot title
     * OUTPUT: output figure name
 -->
- ### plot_mlt_distri.py
+ ### RUN_MLT_DST: plot_mlt_distri.py
 ```
    python plot_mlt_distri.py -dir [DATA DIR] -runid [RUNID] -fmltts [FILEMLT] -vmlt [VARISF] -ftemts [FILET] -vtem [VART] -fsalts [FILES] -vsal [VARS] -isf [ISF] -title "$TITLE" -o ${ISF}_${YEAR} -noshow
 ```
