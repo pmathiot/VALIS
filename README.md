@@ -9,7 +9,7 @@
    * plot_mlt_timeseries.py plots ice shelf melt time series against observation/model estimates
 ![Alt text](melt_ts_cold.png?raw=true "Example of plot_mlt_timeseries.py output")
 -->
-   * *plot_mlt_distri.py* assess for a specific ice shelf :
+   * **plot_mlt_distri.py** assess for a specific ice shelf :
       * water mass properties at the calving front against WOA data
       * ice shelf melt distribution vs isf draft area distribution
       * ice shelf melt time serie
@@ -38,7 +38,7 @@
     * TITLE: plot title
     * OUTPUT: output figure name
 -->
- * *plot_mlt_distri.py*: 
+ * **plot_mlt_distri.py**: 
 ```
    python plot_mlt_distri.py -dir [DATA DIR] -runid [RUNID] -fmltts [FILEMLT] -vmlt [VARISF] -ftemts [FILET] -vtem [VART] -fsalts [FILES] -vsal [VARS] -isf [ISF] -title "$TITLE" -o ${ISF}_${YEAR} -noshow
 ```
